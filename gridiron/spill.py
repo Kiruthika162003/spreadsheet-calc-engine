@@ -77,6 +77,60 @@ class SpillManager:
             f"{count} value(s) spilled from {anchor.a1()}"
         )
 
+    def spill_grid(
+        self, anchor: CellRef, grid: list[list[Value]]
+    ) -> Value | str:
+        if not grid or not grid[0]:
+            raise Invalid("an empty grid cannot spill")
+        widths = {len(row) for row in grid}
+        if len(widths) != 1:
+            raise Invalid(
+                "a ragged grid cannot spill; every row must "
+                "share a width"
+            )
+        targets: list[list[CellRef]] = []
+        for row_offset, row in enumerate(grid):
+            line = []
+            for col_offset in range(len(row)):
+                target = CellRef(
+                    row=anchor.row + row_offset,
+                    col=anchor.col + col_offset,
+                )
+                occupied = (
+                    target.key() != anchor.key()
+                    and self.sheet.cell(target) is not None
+                )
+                if occupied:
+                    blocked = ErrorValue(
+                        code="#VALUE!",
+                        note=(
+                            f"#SPILL! blocked by "
+                            f"{target.a1()}; a half-landed "
+                            "spill is corruption arranged "
+                            "in a rectangle"
+                        ),
+                    )
+                    self.sheet.set_literal(anchor, blocked)
+                    return blocked
+                line.append(target)
+            targets.append(line)
+        ghost_keys = []
+        for row_targets, row_values in zip(
+            targets, grid, strict=True
+        ):
+            for target, value in zip(
+                row_targets, row_values, strict=True
+            ):
+                self.sheet.set_literal(target, value)
+                if target.key() != anchor.key():
+                    self.ghosts[target.key()] = anchor.key()
+                    ghost_keys.append(target.key())
+        self.anchors[anchor.key()] = ghost_keys
+        return (
+            f"{len(grid)}x{len(grid[0])} grid spilled from "
+            f"{anchor.a1()}"
+        )
+
     def edit_guard(self, ref: CellRef) -> None:
         owner = self.ghosts.get(ref.key())
         if owner is not None:
