@@ -131,6 +131,15 @@ def evaluate(
             ),
         )
     if isinstance(node, Name):
+        if node.name == "#REF!":
+            return ErrorValue(
+                code="#REF!",
+                note=(
+                    "this formula carries a baked wound from "
+                    "a deletion; the wound must compute as "
+                    "itself"
+                ),
+            )
         bound = names(node.name)
         if bound is None:
             return ErrorValue(

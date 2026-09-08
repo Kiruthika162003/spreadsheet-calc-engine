@@ -9,6 +9,7 @@ from gridiron.proofs.finding import Finding
 PROOFS = (
     "gridiron.proofs.sleepproof",
     "gridiron.proofs.solveproof",
+    "gridiron.proofs.editproof",
 )
 
 
