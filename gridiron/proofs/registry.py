@@ -13,6 +13,7 @@ PROOFS = (
     "gridiron.proofs.batchproof",
     "gridiron.proofs.crosssheetproof",
     "gridiron.proofs.spillproof",
+    "gridiron.proofs.tableproof",
 )
 
 
