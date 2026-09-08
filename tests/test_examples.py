@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from examples import (
+    auditday,
     budgetsheet,
     firstsheet,
     quarterclose,
@@ -73,3 +74,16 @@ class TestScienceLab:
         assert "counts:  4 3 1 2" in out
         assert "trend:   Reading: [ :.=. -#..]" in out
         assert "4.7 to 6.1" in out
+
+
+class TestAuditDay:
+    def test_the_audit_reads_end_to_end(self, capsys):
+        assert auditday.main() == 0
+        out = capsys.readouterr().out
+        assert "census:  #DIV/0!: 1 born, 2 echo(es)" in out
+        assert "origin:  B2" in out
+        assert "trail:   D1 <- C1 <- B2" in out
+        assert "wall:    load-bearing wall: B1" in out
+        assert "spread:  B1 feeds B2, C1" in out
+        assert "healed:  D1 is healthy" in out
+        assert "result:  D1 = 2640" in out
