@@ -27,7 +27,7 @@ class TestTheBatch:
         batch = Batch(engine=engine)
         for row in range(1, 11):
             batch.set_literal(ref(f"A{row}"), float(row * 10))
-        report, receipt = batch.commit()
+        _report, receipt = batch.commit()
         assert receipt == (
             "10 edit(s), 2 evaluation(s) in one recalc"
         )
@@ -39,7 +39,7 @@ class TestTheBatch:
         batch = Batch(engine=engine)
         batch.set_literal(ref("A1"), 100.0)
         batch.set_formula(ref("D1"), "=A1+C1")
-        report, _ = batch.commit()
+        batch.commit()
         assert engine.value(ref("D1")) == 100.0 + 154.0
 
     def test_the_closed_batch_refuses_more_edits(self):
