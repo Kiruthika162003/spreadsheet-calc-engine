@@ -7,6 +7,7 @@ from gridiron.datefns import DATE_FUNCTIONS
 from gridiron.functions import BUILTINS
 from gridiron.logicfns import LOGIC_FUNCTIONS
 from gridiron.lookupfns import LOOKUP_FUNCTIONS
+from gridiron.statfns import STAT_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
 
 _FAMILIES = (
@@ -16,6 +17,7 @@ _FAMILIES = (
     LOOKUP_FUNCTIONS,
     CONDITIONAL_FUNCTIONS,
     DATE_FUNCTIONS,
+    STAT_FUNCTIONS,
 )
 
 
