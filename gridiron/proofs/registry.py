@@ -21,6 +21,7 @@ PROOFS = (
     "gridiron.proofs.importproof",
     "gridiron.proofs.goalseekproof",
     "gridiron.proofs.subtotalproof",
+    "gridiron.proofs.scenarioproof",
 )
 
 
