@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from examples import budgetsheet, firstsheet
+from examples import budgetsheet, firstsheet, quarterclose
 
 
 class TestFirstSheet:
@@ -28,3 +28,13 @@ class TestBudgetSheet:
         assert "food:    2 line items" in out
         assert "verdict: rent heavy" in out
         assert "the classic blind spot" in out
+
+
+class TestQuarterClose:
+    def test_the_close_reads_end_to_end(self, capsys):
+        assert quarterclose.main() == 0
+        out = capsys.readouterr().out
+        assert "workdays: 65 in the quarter" in out
+        assert "net:      73,912.50" in out
+        assert "filed: C1=73912.5" in out
+        assert "audited: C1=77420" in out
