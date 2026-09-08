@@ -22,6 +22,7 @@ from gridiron.regression import REGRESSION_FUNCTIONS
 from gridiron.statfns import STAT_FUNCTIONS
 from gridiron.textextra import TEXT_EXTRA_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
+from gridiron.units import UNIT_FUNCTIONS
 
 _FAMILIES = (
     BUILTINS,
@@ -42,6 +43,7 @@ _FAMILIES = (
     MATH_FUNCTIONS,
     MATH_EXTRA_FUNCTIONS,
     ENGINEERING_FUNCTIONS,
+    UNIT_FUNCTIONS,
     IS_FUNCTIONS,
     LET_FUNCTIONS,
 )
