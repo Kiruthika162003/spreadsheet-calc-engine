@@ -21,7 +21,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from gridiron.errors import Missing
-from gridiron.evaluate import SheetLookup, evaluate
+from gridiron.evaluate import (
+    FunctionTable,
+    SheetLookup,
+    evaluate,
+)
 from gridiron.library import full_table
 from gridiron.refs import CellRef, RangeRef
 from gridiron.sheet import Sheet
@@ -56,6 +60,7 @@ class Engine:
         default_factory=list
     )
     sheets: SheetLookup | None = field(default=None)
+    functions: FunctionTable = field(default=full_table)
 
     def _reindex(self) -> None:
         self.cell_dependents.clear()
@@ -146,7 +151,7 @@ class Engine:
         return evaluate(
             cell.tree,
             self.sheet.value_of,
-            full_table,
+            self.functions,
             sheets=self.sheets,
         )
 
