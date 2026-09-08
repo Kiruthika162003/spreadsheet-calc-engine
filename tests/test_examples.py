@@ -4,6 +4,7 @@ from examples import (
     auditday,
     budgetsheet,
     firstsheet,
+    pivotday,
     quarterclose,
     sciencelab,
     spillsheet,
@@ -117,3 +118,15 @@ class TestSpillSheet:
         assert "kept:      Ada, Alan" in out
         assert "sortby:    3x1 grid spilled from G5" in out
         assert "ranked:    Alan, Ada, Grace" in out
+
+
+class TestPivotDay:
+    def test_the_pivot_day_reads_end_to_end(self, capsys):
+        assert pivotday.main() == 0
+        out = capsys.readouterr().out
+        assert "Sales grew to row 6" in out
+        assert "east Q1: 400" in out
+        assert "grand:   800" in out
+        assert "East    400  150    550" in out
+        assert "TOTAL   600  200    800" in out
+        assert "| Region | Quarter | Sales |" in out
