@@ -20,6 +20,7 @@ PROOFS = (
     "gridiron.proofs.formatproof",
     "gridiron.proofs.importproof",
     "gridiron.proofs.goalseekproof",
+    "gridiron.proofs.subtotalproof",
 )
 
 
