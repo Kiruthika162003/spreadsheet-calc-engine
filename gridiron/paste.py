@@ -30,6 +30,7 @@ from gridiron.ast import (
     Ref,
     Text,
     Unary,
+    XRef,
 )
 from gridiron.errors import Invalid
 from gridiron.parser import parse_formula
@@ -38,7 +39,7 @@ from gridiron.values import render
 
 
 def shift_node(node: Node, rows: int, cols: int) -> Node:
-    if isinstance(node, (Number | Text | Bool | Name)):
+    if isinstance(node, (Number | Text | Bool | Name | XRef)):
         return node
     if isinstance(node, Ref):
         try:
@@ -93,6 +94,8 @@ def unparse(node: Node) -> str:
         return node.ref.a1()
     if isinstance(node, Name):
         return node.name
+    if isinstance(node, XRef):
+        return f"{node.sheet}!{node.ref.a1()}"
     if isinstance(node, Unary):
         return f"-{unparse(node.operand)}"
     if isinstance(node, Binary):

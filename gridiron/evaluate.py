@@ -12,6 +12,20 @@ before booleans, matching the incumbent's sort order, and a
 bare range in scalar position is a #VALUE! rather than a
 guess about which of its nine cells the author meant, since
 guessing is how a wrong quarter total survives review.
+
+The sheet resolver rides the recursion, and the first draft
+learned why that sentence has to be true the hard way: the
+resolver was passed at the top and silently dropped at the
+first operator, so =Data!B1+10 computed the cross reference
+in a sheetless world and returned #REF! while =Data!B1 alone
+worked. The forwarding now reaches every operator branch.
+One boundary remains and is stated rather than hidden:
+function arguments re-enter evaluation through the function
+table, which does not carry the resolver, so an XRef inside
+a call like ABS(Data!B1) still computes as the sheetless
+#REF!. Threading the workbook door through every function
+family is a larger renovation than an evaluator fix, and an
+honest refusal beats a half-plumbed pipe.
 """
 
 from __future__ import annotations
@@ -29,6 +43,7 @@ from gridiron.ast import (
     Ref,
     Text,
     Unary,
+    XRef,
 )
 from gridiron.errors import Missing
 from gridiron.refs import CellRef
@@ -46,6 +61,7 @@ from gridiron.values import (
 CellLookup = Callable[[CellRef], Value]
 FunctionTable = Callable[[str], Callable | None]
 NameTable = Callable[[str], Node | None]
+SheetLookup = Callable[[str, CellRef], "Value"]
 
 _TYPE_RANK = {"number": 0, "text": 1, "bool": 2}
 
@@ -112,6 +128,7 @@ def evaluate(
     lookup: CellLookup,
     functions: FunctionTable,
     names: NameTable = lambda _name: None,
+    sheets: SheetLookup | None = None,
 ) -> Value:
     if isinstance(node, Number):
         return node.value
@@ -121,6 +138,17 @@ def evaluate(
         return node.value
     if isinstance(node, Ref):
         return lookup(node.ref)
+    if isinstance(node, XRef):
+        if sheets is None:
+            return ErrorValue(
+                code="#REF!",
+                note=(
+                    f"{node.sheet}!{node.ref.a1()} needs a "
+                    "workbook; this evaluation has only one "
+                    "sheet's world"
+                ),
+            )
+        return sheets(node.sheet, node.ref)
     if isinstance(node, Range):
         return ErrorValue(
             code="#VALUE!",
@@ -146,13 +174,19 @@ def evaluate(
                 code="#NAME?",
                 note=f"{node.name} is not a defined name",
             )
-        return evaluate(bound, lookup, functions, names)
+        return evaluate(bound, lookup, functions, names, sheets)
     if isinstance(node, Unary):
-        inner = evaluate(node.operand, lookup, functions, names)
+        inner = evaluate(
+            node.operand, lookup, functions, names, sheets
+        )
         return multiply(inner, -1.0)
     if isinstance(node, Binary):
-        left = evaluate(node.left, lookup, functions, names)
-        right = evaluate(node.right, lookup, functions, names)
+        left = evaluate(
+            node.left, lookup, functions, names, sheets
+        )
+        right = evaluate(
+            node.right, lookup, functions, names, sheets
+        )
         if node.op == "+":
             return add(left, right)
         if node.op == "-":

@@ -124,7 +124,7 @@ def lex(formula: str) -> list[Token]:
             start = index
             while index < length and (
                 formula[index].isalnum()
-                or formula[index] in "$_."
+                or formula[index] in "$_.!"
             ):
                 index += 1
             tokens.append(

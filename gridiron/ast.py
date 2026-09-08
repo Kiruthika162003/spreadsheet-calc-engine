@@ -60,6 +60,15 @@ class Range:
 
 
 @dataclass(frozen=True)
+class XRef:
+    sheet: str
+    ref: CellRef
+
+    def refs(self) -> list[CellRef | RangeRef]:
+        return []
+
+
+@dataclass(frozen=True)
 class Name:
     name: str
 
@@ -99,5 +108,14 @@ class Call:
 
 
 Node = (
-    Number | Text | Bool | Ref | Range | Name | Unary | Binary | Call
+    Number
+    | Text
+    | Bool
+    | Ref
+    | Range
+    | XRef
+    | Name
+    | Unary
+    | Binary
+    | Call
 )

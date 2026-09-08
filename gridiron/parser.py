@@ -28,6 +28,7 @@ from gridiron.ast import (
     Ref,
     Text,
     Unary,
+    XRef,
 )
 from gridiron.errors import Invalid, Unparseable
 from gridiron.refs import CellRef, RangeRef
@@ -165,6 +166,24 @@ class Parser:
 
     def word(self, token: Token) -> Node:
         upper = token.text.upper()
+        if "!" in upper:
+            sheet_name, _, ref_text = upper.partition("!")
+            if not sheet_name or not ref_text:
+                raise Unparseable(
+                    f"a sheet reference needs both halves at "
+                    f"position {token.position}"
+                )
+            if self.at_operator(":"):
+                raise Unparseable(
+                    "cross-sheet ranges are not supported; "
+                    "pull the range onto one sheet and "
+                    "reference the result"
+                )
+            try:
+                target = CellRef.parse(ref_text)
+            except Invalid as refusal:
+                raise Unparseable(str(refusal)) from refusal
+            return XRef(sheet=sheet_name, ref=target)
         if upper in ("TRUE", "FALSE"):
             return Bool(value=upper == "TRUE")
         if self.at_operator("("):
