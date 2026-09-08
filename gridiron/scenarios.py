@@ -67,7 +67,7 @@ class ScenarioManager:
         held = self.scenarios.get(name)
         if held is None:
             raise Missing(f"no scenario named {name}")
-        for key, value in held.items():
+        for key in held:
             ref = CellRef(row=key[0], col=key[1])
             cell = self.engine.sheet.cell(ref)
             if cell is not None and cell.is_formula():
