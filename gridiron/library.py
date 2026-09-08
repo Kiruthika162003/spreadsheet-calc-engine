@@ -6,6 +6,7 @@ from gridiron.conditionalfns import CONDITIONAL_FUNCTIONS
 from gridiron.datefns import DATE_FUNCTIONS
 from gridiron.financefns import FINANCE_FUNCTIONS
 from gridiron.functions import BUILTINS
+from gridiron.isfns import IS_FUNCTIONS
 from gridiron.logicfns import LOGIC_FUNCTIONS
 from gridiron.lookupfns import LOOKUP_FUNCTIONS
 from gridiron.mathfns import MATH_FUNCTIONS
@@ -22,6 +23,7 @@ _FAMILIES = (
     STAT_FUNCTIONS,
     FINANCE_FUNCTIONS,
     MATH_FUNCTIONS,
+    IS_FUNCTIONS,
 )
 
 
