@@ -17,6 +17,7 @@ PROOFS = (
     "gridiron.proofs.undoproof",
     "gridiron.proofs.sortproof",
     "gridiron.proofs.pivotproof",
+    "gridiron.proofs.formatproof",
 )
 
 
