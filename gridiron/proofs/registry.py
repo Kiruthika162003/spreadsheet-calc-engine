@@ -24,6 +24,7 @@ PROOFS = (
     "gridiron.proofs.scenarioproof",
     "gridiron.proofs.datatableproof",
     "gridiron.proofs.clipboardproof",
+    "gridiron.proofs.mergeproof",
 )
 
 
