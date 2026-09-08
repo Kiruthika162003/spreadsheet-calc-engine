@@ -23,6 +23,7 @@ from gridiron.queryfns import QUERY_FUNCTIONS
 from gridiron.rankfns import RANK_FUNCTIONS
 from gridiron.regression import REGRESSION_FUNCTIONS
 from gridiron.statfns import STAT_FUNCTIONS
+from gridiron.statsmore import STATS_MORE_FUNCTIONS
 from gridiron.textextra import TEXT_EXTRA_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
 from gridiron.textmore import TEXT_MORE_FUNCTIONS
@@ -42,6 +43,7 @@ _FAMILIES = (
     DATE_FUNCTIONS,
     DATE_EXTRA_FUNCTIONS,
     STAT_FUNCTIONS,
+    STATS_MORE_FUNCTIONS,
     RANK_FUNCTIONS,
     REGRESSION_FUNCTIONS,
     QUERY_FUNCTIONS,
