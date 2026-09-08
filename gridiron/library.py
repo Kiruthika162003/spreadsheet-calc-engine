@@ -21,6 +21,7 @@ from gridiron.mathextra import MATH_EXTRA_FUNCTIONS
 from gridiron.mathfns import MATH_FUNCTIONS
 from gridiron.mathmore import MATH_MORE_FUNCTIONS
 from gridiron.multicriteria import MULTICRITERIA_FUNCTIONS
+from gridiron.pairwisefns import PAIRWISE_FUNCTIONS
 from gridiron.queryfns import QUERY_FUNCTIONS
 from gridiron.rankfns import RANK_FUNCTIONS
 from gridiron.regression import REGRESSION_FUNCTIONS
@@ -55,6 +56,7 @@ _FAMILIES = (
     MATH_FUNCTIONS,
     MATH_EXTRA_FUNCTIONS,
     MATH_MORE_FUNCTIONS,
+    PAIRWISE_FUNCTIONS,
     ENGINEERING_FUNCTIONS,
     UNIT_FUNCTIONS,
     IS_FUNCTIONS,
