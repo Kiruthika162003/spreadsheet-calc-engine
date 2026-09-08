@@ -26,6 +26,7 @@ PROOFS = (
     "gridiron.proofs.clipboardproof",
     "gridiron.proofs.mergeproof",
     "gridiron.proofs.iterativeproof",
+    "gridiron.proofs.volatileproof",
 )
 
 
