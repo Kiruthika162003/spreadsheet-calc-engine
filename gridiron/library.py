@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from gridiron.conditionalfns import CONDITIONAL_FUNCTIONS
 from gridiron.datefns import DATE_FUNCTIONS
+from gridiron.datextra import DATE_EXTRA_FUNCTIONS
 from gridiron.financefns import FINANCE_FUNCTIONS
 from gridiron.functions import BUILTINS
 from gridiron.isfns import IS_FUNCTIONS
@@ -27,6 +28,7 @@ _FAMILIES = (
     LOOKUP_EXTRA_FUNCTIONS,
     CONDITIONAL_FUNCTIONS,
     DATE_FUNCTIONS,
+    DATE_EXTRA_FUNCTIONS,
     STAT_FUNCTIONS,
     RANK_FUNCTIONS,
     QUERY_FUNCTIONS,
