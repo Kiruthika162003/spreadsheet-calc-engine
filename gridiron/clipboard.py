@@ -13,7 +13,15 @@ and refuses the hybrid: cutting a range while pasting it
 partially atop itself is rejected, because a move that
 overlaps its own origin has no coherent order of operations
 and every engine that allows it documents a different
-wrong answer.
+wrong answer. The follower count is a measured number and
+must stay honest, which cost a bug fix once: the retargeting
+walk rebuilt every operator node whether or not a reference
+underneath it actually moved, so the identity check that
+decides "did this formula follow" reported yes for every
+formula with any structure, inflating the count. The walk
+now returns the very same node object when nothing beneath
+it changed, so a formula counts as a follower only when a
+reference in it truly retargeted.
 """
 
 from __future__ import annotations
@@ -51,24 +59,28 @@ def _retarget(
     if isinstance(node, Range):
         return node
     if isinstance(node, Unary):
-        return Unary(
-            op=node.op,
-            operand=_retarget(node.operand, old, new),
-        )
+        operand = _retarget(node.operand, old, new)
+        if operand is node.operand:
+            return node
+        return Unary(op=node.op, operand=operand)
     if isinstance(node, Binary):
-        return Binary(
-            op=node.op,
-            left=_retarget(node.left, old, new),
-            right=_retarget(node.right, old, new),
-        )
+        left = _retarget(node.left, old, new)
+        right = _retarget(node.right, old, new)
+        if left is node.left and right is node.right:
+            return node
+        return Binary(op=node.op, left=left, right=right)
     if isinstance(node, Call):
-        return Call(
-            function=node.function,
-            args=tuple(
-                _retarget(arg, old, new)
-                for arg in node.args
-            ),
+        args = tuple(
+            _retarget(arg, old, new) for arg in node.args
         )
+        if all(
+            new_arg is old_arg
+            for new_arg, old_arg in zip(
+                args, node.args, strict=True
+            )
+        ):
+            return node
+        return Call(function=node.function, args=args)
     return node
 
 

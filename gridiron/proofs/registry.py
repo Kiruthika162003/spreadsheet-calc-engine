@@ -23,6 +23,7 @@ PROOFS = (
     "gridiron.proofs.subtotalproof",
     "gridiron.proofs.scenarioproof",
     "gridiron.proofs.datatableproof",
+    "gridiron.proofs.clipboardproof",
 )
 
 
