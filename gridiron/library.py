@@ -13,11 +13,13 @@ from gridiron.mathfns import MATH_FUNCTIONS
 from gridiron.queryfns import QUERY_FUNCTIONS
 from gridiron.rankfns import RANK_FUNCTIONS
 from gridiron.statfns import STAT_FUNCTIONS
+from gridiron.textextra import TEXT_EXTRA_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
 
 _FAMILIES = (
     BUILTINS,
     TEXT_FUNCTIONS,
+    TEXT_EXTRA_FUNCTIONS,
     LOGIC_FUNCTIONS,
     LOOKUP_FUNCTIONS,
     CONDITIONAL_FUNCTIONS,
