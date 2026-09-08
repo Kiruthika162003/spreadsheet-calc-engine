@@ -19,6 +19,7 @@ PROOFS = (
     "gridiron.proofs.pivotproof",
     "gridiron.proofs.formatproof",
     "gridiron.proofs.importproof",
+    "gridiron.proofs.goalseekproof",
 )
 
 
