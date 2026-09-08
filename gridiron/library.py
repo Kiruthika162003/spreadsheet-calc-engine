@@ -12,6 +12,7 @@ from gridiron.functions import BUILTINS
 from gridiron.isfns import IS_FUNCTIONS
 from gridiron.letfns import LET_FUNCTIONS
 from gridiron.logicfns import LOGIC_FUNCTIONS
+from gridiron.logicmore import LOGIC_MORE_FUNCTIONS
 from gridiron.lookupextra import LOOKUP_EXTRA_FUNCTIONS
 from gridiron.lookupfns import LOOKUP_FUNCTIONS
 from gridiron.mathextra import MATH_EXTRA_FUNCTIONS
@@ -31,6 +32,7 @@ _FAMILIES = (
     TEXT_FUNCTIONS,
     TEXT_EXTRA_FUNCTIONS,
     LOGIC_FUNCTIONS,
+    LOGIC_MORE_FUNCTIONS,
     LOOKUP_FUNCTIONS,
     LOOKUP_EXTRA_FUNCTIONS,
     CONDITIONAL_FUNCTIONS,
