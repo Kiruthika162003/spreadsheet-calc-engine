@@ -9,6 +9,7 @@ from gridiron.engineering import ENGINEERING_FUNCTIONS
 from gridiron.financeextra import FINANCE_EXTRA_FUNCTIONS
 from gridiron.financefns import FINANCE_FUNCTIONS
 from gridiron.functions import BUILTINS
+from gridiron.infofns import INFO_FUNCTIONS
 from gridiron.isfns import IS_FUNCTIONS
 from gridiron.letfns import LET_FUNCTIONS
 from gridiron.logicfns import LOGIC_FUNCTIONS
@@ -55,6 +56,7 @@ _FAMILIES = (
     ENGINEERING_FUNCTIONS,
     UNIT_FUNCTIONS,
     IS_FUNCTIONS,
+    INFO_FUNCTIONS,
     LET_FUNCTIONS,
 )
 
