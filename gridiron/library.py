@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from gridiron.conditionalfns import CONDITIONAL_FUNCTIONS
 from gridiron.functions import BUILTINS
 from gridiron.logicfns import LOGIC_FUNCTIONS
 from gridiron.lookupfns import LOOKUP_FUNCTIONS
@@ -12,6 +13,7 @@ _FAMILIES = (
     TEXT_FUNCTIONS,
     LOGIC_FUNCTIONS,
     LOOKUP_FUNCTIONS,
+    CONDITIONAL_FUNCTIONS,
 )
 
 

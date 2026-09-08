@@ -53,6 +53,13 @@ class TestWildcards:
         assert "only combine with = or <>" in str(caught.value)
 
 
+class TestEmptiness:
+    def test_the_empty_cell_matches_nothing_ever(self):
+        assert not Criterion.parse("<>zzz").matches(None)
+        assert not Criterion.parse("<>5").matches(None)
+        assert not Criterion.parse("*").matches(None)
+
+
 class TestRefusals:
     def test_the_empty_criterion_wants_isblank(self):
         with pytest.raises(Invalid) as caught:

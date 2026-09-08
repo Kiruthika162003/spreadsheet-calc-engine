@@ -117,4 +117,6 @@ class Criterion:
         )
 
     def matches(self, value: Value) -> bool:
+        if value is None:
+            return False
         return self.predicate(value)
