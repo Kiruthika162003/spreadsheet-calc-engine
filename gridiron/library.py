@@ -4,9 +4,15 @@ from __future__ import annotations
 
 from gridiron.functions import BUILTINS
 from gridiron.logicfns import LOGIC_FUNCTIONS
+from gridiron.lookupfns import LOOKUP_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
 
-_FAMILIES = (BUILTINS, TEXT_FUNCTIONS, LOGIC_FUNCTIONS)
+_FAMILIES = (
+    BUILTINS,
+    TEXT_FUNCTIONS,
+    LOGIC_FUNCTIONS,
+    LOOKUP_FUNCTIONS,
+)
 
 
 def full_table(name: str):

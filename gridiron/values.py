@@ -29,6 +29,7 @@ ERROR_CODES = (
     "#NAME?",
     "#CYCLE!",
     "#NUM!",
+    "#N/A",
 )
 
 
