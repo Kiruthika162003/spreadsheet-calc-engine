@@ -10,6 +10,7 @@ PROOFS = (
     "gridiron.proofs.sleepproof",
     "gridiron.proofs.solveproof",
     "gridiron.proofs.editproof",
+    "gridiron.proofs.batchproof",
 )
 
 
