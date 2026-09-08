@@ -76,7 +76,6 @@ def is_leap_year(year: int) -> bool:
 
 
 def iso_week(serial: int) -> int:
-    date = from_serial(serial)
     # The Thursday of this date's ISO week determines the
     # year the week belongs to; week one holds January's
     # first Thursday.
