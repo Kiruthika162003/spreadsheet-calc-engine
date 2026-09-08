@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from examples import budgetsheet, firstsheet, quarterclose
+from examples import (
+    budgetsheet,
+    firstsheet,
+    quarterclose,
+    workbooktour,
+)
 
 
 class TestFirstSheet:
@@ -38,3 +43,18 @@ class TestQuarterClose:
         assert "net:      73,912.50" in out
         assert "filed: C1=73912.5" in out
         assert "audited: C1=77420" in out
+
+
+class TestWorkbookTour:
+    def test_the_tour_reads_end_to_end(self, capsys):
+        assert workbooktour.main() == 0
+        out = capsys.readouterr().out
+        assert "margin:  1780" in out
+        assert "share:   0.445" in out
+        assert (
+            "1 cross-sheet formula(s) refreshed in "
+            "2 round(s)"
+        ) in out
+        assert "margin:  1480" in out
+        assert "Revenue dropped; 2 formula(s)" in out
+        assert "wound:   C1 now reads #REF!" in out
