@@ -8,6 +8,7 @@ from gridiron.financefns import FINANCE_FUNCTIONS
 from gridiron.functions import BUILTINS
 from gridiron.isfns import IS_FUNCTIONS
 from gridiron.logicfns import LOGIC_FUNCTIONS
+from gridiron.lookupextra import LOOKUP_EXTRA_FUNCTIONS
 from gridiron.lookupfns import LOOKUP_FUNCTIONS
 from gridiron.mathfns import MATH_FUNCTIONS
 from gridiron.queryfns import QUERY_FUNCTIONS
@@ -22,6 +23,7 @@ _FAMILIES = (
     TEXT_EXTRA_FUNCTIONS,
     LOGIC_FUNCTIONS,
     LOOKUP_FUNCTIONS,
+    LOOKUP_EXTRA_FUNCTIONS,
     CONDITIONAL_FUNCTIONS,
     DATE_FUNCTIONS,
     STAT_FUNCTIONS,
