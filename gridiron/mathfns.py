@@ -139,7 +139,7 @@ def _product(args, lookup, functions, names) -> Value:
     return total
 
 
-def _sumproduct(args, lookup, functions, names) -> Value:
+def _sumproduct(args, lookup, _functions, _names) -> Value:
     if len(args) < 2 or not all(
         isinstance(arg, Range) for arg in args
     ):
