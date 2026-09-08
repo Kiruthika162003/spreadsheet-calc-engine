@@ -22,7 +22,7 @@ from dataclasses import dataclass
 
 from gridiron.errors import Invalid
 from gridiron.evaluate import evaluate
-from gridiron.functions import builtin_table
+from gridiron.library import full_table
 from gridiron.refs import CellRef
 from gridiron.sheet import Sheet
 from gridiron.values import Value, is_error, to_number
@@ -53,7 +53,7 @@ class IterativeSolver:
                 fresh = evaluate(
                     cell.tree,
                     self.sheet.value_of,
-                    builtin_table,
+                    full_table,
                 )
                 if is_error(fresh):
                     ref = CellRef(row=key[0], col=key[1])

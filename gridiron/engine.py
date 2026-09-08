@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 
 from gridiron.errors import Missing
 from gridiron.evaluate import evaluate
-from gridiron.functions import builtin_table
+from gridiron.library import full_table
 from gridiron.refs import CellRef, RangeRef
 from gridiron.sheet import Sheet
 from gridiron.values import ErrorValue, Value
@@ -143,7 +143,7 @@ class Engine:
     def _evaluate_cell(self, key: tuple[int, int]) -> Value:
         cell = self.sheet.cells[key]
         return evaluate(
-            cell.tree, self.sheet.value_of, builtin_table
+            cell.tree, self.sheet.value_of, full_table
         )
 
     def _run(self, dirty: set[tuple[int, int]]) -> RecalcReport:
