@@ -49,7 +49,7 @@ def _balance_before(
     return pv * growth + payment * (growth - 1) / rate
 
 
-def _validate(rate: float, nper: int, period: int) -> None:
+def _validate(nper: int, period: int) -> None:
     if nper < 1:
         raise Invalid("a loan needs at least one period")
     if not 1 <= period <= nper:
@@ -63,7 +63,7 @@ def _validate(rate: float, nper: int, period: int) -> None:
 def ipmt(
     rate: float, period: int, nper: int, pv: float
 ) -> float:
-    _validate(rate, nper, period)
+    _validate(nper, period)
     balance = _balance_before(rate, nper, pv, period)
     return -balance * rate
 
@@ -71,7 +71,7 @@ def ipmt(
 def ppmt(
     rate: float, period: int, nper: int, pv: float
 ) -> float:
-    _validate(rate, nper, period)
+    _validate(nper, period)
     payment = _level_payment(rate, nper, pv)
     return payment - ipmt(rate, period, nper, pv)
 
