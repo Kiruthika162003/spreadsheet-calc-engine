@@ -25,7 +25,12 @@ table, which does not carry the resolver, so an XRef inside
 a call like ABS(Data!B1) still computes as the sheetless
 #REF!. Threading the workbook door through every function
 family is a larger renovation than an evaluator fix, and an
-honest refusal beats a half-plumbed pipe.
+honest refusal beats a half-plumbed pipe. A name bound to a
+whole range is unwrapped at the call boundary, so
+SUM(ORDERS.AMOUNT) hands the range itself to the function
+while the same name in scalar position still refuses,
+because the function knows how to fold a region and a bare
+cell does not.
 """
 
 from __future__ import annotations
@@ -207,5 +212,12 @@ def evaluate(
                 code="#NAME?",
                 note=f"{node.function} is not a function here",
             )
-        return function(node.args, lookup, functions, names)
+        args = tuple(
+            bound
+            if isinstance(arg, Name)
+            and isinstance(bound := names(arg.name), Range)
+            else arg
+            for arg in node.args
+        )
+        return function(args, lookup, functions, names)
     raise Missing(f"unknown node kind {type(node).__name__}")
