@@ -10,6 +10,7 @@ from gridiron.isfns import IS_FUNCTIONS
 from gridiron.logicfns import LOGIC_FUNCTIONS
 from gridiron.lookupextra import LOOKUP_EXTRA_FUNCTIONS
 from gridiron.lookupfns import LOOKUP_FUNCTIONS
+from gridiron.mathextra import MATH_EXTRA_FUNCTIONS
 from gridiron.mathfns import MATH_FUNCTIONS
 from gridiron.queryfns import QUERY_FUNCTIONS
 from gridiron.rankfns import RANK_FUNCTIONS
@@ -31,6 +32,7 @@ _FAMILIES = (
     QUERY_FUNCTIONS,
     FINANCE_FUNCTIONS,
     MATH_FUNCTIONS,
+    MATH_EXTRA_FUNCTIONS,
     IS_FUNCTIONS,
 )
 
