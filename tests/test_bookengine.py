@@ -42,6 +42,36 @@ class TestCrossSheetReads:
         assert engine.value("Data", ref("B1")) == 200.0
         assert engine.value("Summary", ref("C1")) == 210.0
 
+    def test_the_watchers_local_dependents_ride_along(self):
+        engine = book()
+        engine.set_formula("Summary", ref("C2"), "=C1*2")
+        engine.set_literal("Data", ref("A1"), 100.0)
+        assert engine.value("Summary", ref("C1")) == 210.0
+        assert engine.value("Summary", ref("C2")) == 420.0
+
+    def test_a_chain_across_three_sheets_settles(self):
+        engine = book()
+        engine.add_sheet("Report")
+        engine.set_formula(
+            "Report", ref("A1"), "=Summary!C1*10"
+        )
+        verdict = engine.set_literal(
+            "Data", ref("A1"), 100.0
+        )
+        assert engine.value("Report", ref("A1")) == 2100.0
+        assert "round(s)" in verdict
+
+    def test_a_workbook_loop_is_stamped_at_the_cap(self):
+        engine = BookEngine()
+        engine.add_sheet("Alpha")
+        engine.add_sheet("Beta")
+        engine.set_formula("Alpha", ref("A1"), "=Beta!A1+1")
+        engine.set_formula("Beta", ref("A1"), "=Alpha!A1+1")
+        value = engine.value("Alpha", ref("A1"))
+        assert is_error(value)
+        assert value.code == "#CYCLE!"
+        assert "crosses sheet boundaries" in value.note
+
     def test_the_dropped_sheet_wounds_mid_formula(self):
         engine = book()
         engine.book.drop_sheet("Data")

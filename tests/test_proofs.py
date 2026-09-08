@@ -27,6 +27,7 @@ class TestTheCli:
         assert main(["proofs"]) == 0
         out = capsys.readouterr().out
         assert "sleepproof: holds:" in out
+        assert "crosssheetproof: holds:" in out
 
     def test_no_command_prints_help(self, capsys):
         assert main([]) == 2

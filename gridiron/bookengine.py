@@ -2,17 +2,28 @@
 
 Cross-sheet references make the dependency graph span the
 workbook, and the book engine owns that span: each sheet
-keeps a local engine for its internal edges while the book
-tracks the cross edges, an edit on Data recalculates Data's
-cone locally and then the formulas on other sheets that
-watch the changed cells through XRefs, in that order,
-because a summary sheet reading a total must read the total
-after it settled. The evaluation world injected into every
-formula includes the sheet resolver, so Data!A1 reads
-through the same door the workbook module built, wounds and
-all: a reference to a dropped sheet computes as #REF!
-mid-formula while the rest of the expression carries on
-poisoned, exactly as the value model promises.
+keeps a local engine for its internal edges, every local
+engine carries the sheet resolver so Data!A1 evaluates
+through the workbook door even during an ordinary local run,
+and after an edit's local cone settles the book refreshes
+the cross-sheet formulas in rounds until a whole round
+changes nothing. Rounds matter because chains cross more
+than one boundary: an edit on Costs moves a total that
+Summary reads, and a Report cell reading Summary must see
+the moved value, which a single sweep keyed to the edited
+sheet would miss. The first design keyed the sweep exactly
+that way and also refreshed the watcher cell directly,
+leaving the watcher's own local dependents stale, so both
+lessons are baked into the current shape: refreshes go
+through the local engine so the dependent cone rides along,
+and the sweep repeats until settled. A workbook cycle,
+Sheet1 reading Sheet2 reading Sheet1, never settles, so the
+rounds are capped at one per sheet plus one, and formulas
+still changing at the cap are stamped #CYCLE! with a note
+naming the boundary the loop crosses. Wounds behave as the
+value model promises: a reference to a dropped sheet
+computes as #REF! mid-formula while the rest of the
+expression carries on poisoned.
 """
 
 from __future__ import annotations
@@ -28,10 +39,8 @@ from gridiron.ast import (
 )
 from gridiron.engine import Engine
 from gridiron.errors import Invalid
-from gridiron.evaluate import evaluate
-from gridiron.library import full_table
 from gridiron.refs import CellRef
-from gridiron.values import Value
+from gridiron.values import ErrorValue, Value
 from gridiron.workbook import Workbook
 
 
@@ -57,7 +66,9 @@ class BookEngine:
 
     def add_sheet(self, name: str) -> None:
         sheet = self.book.add_sheet(name)
-        self.engines[name.casefold()] = Engine(sheet=sheet)
+        engine = Engine(sheet=sheet)
+        engine.sheets = self._resolver()
+        self.engines[name.casefold()] = engine
 
     def _engine(self, sheet_name: str) -> Engine:
         folded = sheet_name.casefold()
@@ -71,38 +82,58 @@ class BookEngine:
 
         return read
 
-    def _recalc_watchers(self, changed_sheet: str) -> int:
-        folded = changed_sheet.casefold()
-        recalculated = 0
+    def _cross_cells(self):
         for sheet_name, engine in self.engines.items():
-            for _, cell in engine.sheet.formula_cells():
-                crossings = find_xrefs(cell.tree)
-                if not crossings:
-                    continue
-                if sheet_name != folded and not any(
-                    xref.sheet.casefold() == folded
-                    for xref in crossings
-                ):
-                    continue
-                cell.computed = evaluate(
-                    cell.tree,
-                    engine.sheet.value_of,
-                    full_table,
-                    sheets=self._resolver(),
+            for ref, cell in engine.sheet.formula_cells():
+                if find_xrefs(cell.tree):
+                    yield sheet_name, engine, ref, cell
+
+    def _refresh_round(self) -> list[str]:
+        changed = []
+        for sheet_name, engine, ref, cell in self._cross_cells():
+            before = cell.computed
+            engine.recalc_cell(ref)
+            if cell.computed != before:
+                changed.append(f"{sheet_name}!{ref.a1()}")
+        return changed
+
+    def _settle_watchers(self) -> tuple[int, int]:
+        cap = len(self.engines) + 1
+        refreshed: set[str] = set()
+        rounds = 0
+        still_changing: list[str] = []
+        while rounds < cap:
+            still_changing = self._refresh_round()
+            rounds += 1
+            if not still_changing:
+                break
+            refreshed.update(still_changing)
+        if still_changing:
+            for label in still_changing:
+                sheet_name, _, cell_text = label.partition("!")
+                cell = self.engines[
+                    sheet_name
+                ].sheet.cells[CellRef.parse(cell_text).key()]
+                cell.computed = ErrorValue(
+                    code="#CYCLE!",
+                    note=(
+                        f"{label} sits on a loop that crosses "
+                        "sheet boundaries; the refresh rounds "
+                        "never settled"
+                    ),
                 )
-                recalculated += 1
-        return recalculated
+        return len(refreshed), rounds
 
     def set_literal(
         self, sheet_name: str, ref: CellRef, value: Value
     ) -> str:
         engine = self._engine(sheet_name)
         report = engine.set_literal(ref, value)
-        crossers = self._recalc_watchers(sheet_name)
+        crossers, rounds = self._settle_watchers()
         return (
             f"{sheet_name}: {report.line()}; {crossers} "
-            "cross-sheet formula(s) refreshed after the "
-            "local cone settled"
+            "cross-sheet formula(s) refreshed in "
+            f"{rounds} round(s) after the local cone settled"
         )
 
     def set_formula(
@@ -110,18 +141,11 @@ class BookEngine:
     ) -> str:
         engine = self._engine(sheet_name)
         engine.set_formula(ref, text)
-        cell = engine.sheet.cells[ref.key()]
-        if find_xrefs(cell.tree):
-            cell.computed = evaluate(
-                cell.tree,
-                engine.sheet.value_of,
-                full_table,
-                sheets=self._resolver(),
-            )
-        crossers = self._recalc_watchers(sheet_name)
+        crossers, rounds = self._settle_watchers()
         return (
             f"{sheet_name}!{ref.a1()} set; {crossers} "
-            "cross-sheet formula(s) refreshed"
+            "cross-sheet formula(s) refreshed in "
+            f"{rounds} round(s)"
         )
 
     def value(

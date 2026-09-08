@@ -11,6 +11,7 @@ PROOFS = (
     "gridiron.proofs.solveproof",
     "gridiron.proofs.editproof",
     "gridiron.proofs.batchproof",
+    "gridiron.proofs.crosssheetproof",
 )
 
 

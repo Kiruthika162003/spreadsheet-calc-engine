@@ -21,7 +21,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from gridiron.errors import Missing
-from gridiron.evaluate import evaluate
+from gridiron.evaluate import SheetLookup, evaluate
 from gridiron.library import full_table
 from gridiron.refs import CellRef, RangeRef
 from gridiron.sheet import Sheet
@@ -55,6 +55,7 @@ class Engine:
     range_watchers: list[tuple[RangeRef, tuple[int, int]]] = field(
         default_factory=list
     )
+    sheets: SheetLookup | None = field(default=None)
 
     def _reindex(self) -> None:
         self.cell_dependents.clear()
@@ -143,7 +144,10 @@ class Engine:
     def _evaluate_cell(self, key: tuple[int, int]) -> Value:
         cell = self.sheet.cells[key]
         return evaluate(
-            cell.tree, self.sheet.value_of, full_table
+            cell.tree,
+            self.sheet.value_of,
+            full_table,
+            sheets=self.sheets,
         )
 
     def _run(self, dirty: set[tuple[int, int]]) -> RecalcReport:
@@ -188,6 +192,10 @@ class Engine:
             raise Missing(f"{ref.a1()} was already empty")
         self._reindex()
         return self._run(self._dirty_closure({ref.key()}))
+
+    def recalc_cell(self, ref: CellRef) -> RecalcReport:
+        seeds = {ref.key()}
+        return self._run(seeds | self._dirty_closure(seeds))
 
     def full_recalc(self) -> RecalcReport:
         self._reindex()
