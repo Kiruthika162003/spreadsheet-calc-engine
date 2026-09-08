@@ -107,7 +107,7 @@ def _t(args, lookup, functions, names) -> Value:
     return value if isinstance(value, str) else ""
 
 
-def _na(args, lookup, functions, names) -> Value:
+def _na(args, _lookup, _functions, _names) -> Value:
     if args:
         return ErrorValue(
             code="#VALUE!", note="NA takes no arguments"
