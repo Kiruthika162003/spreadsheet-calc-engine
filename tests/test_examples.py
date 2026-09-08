@@ -4,6 +4,7 @@ from examples import (
     budgetsheet,
     firstsheet,
     quarterclose,
+    sciencelab,
     workbooktour,
 )
 
@@ -58,3 +59,17 @@ class TestWorkbookTour:
         assert "margin:  1480" in out
         assert "Revenue dropped; 2 formula(s)" in out
         assert "wound:   C1 now reads #REF!" in out
+
+
+class TestScienceLab:
+    def test_the_lab_reads_end_to_end(self, capsys):
+        assert sciencelab.main() == 0
+        out = capsys.readouterr().out
+        assert "mean:    5.13" in out
+        assert "median:  5" in out
+        assert "stdev:   0.4218" in out
+        assert "p90:     5.65" in out
+        assert "bins:    4x1 grid spilled from E1" in out
+        assert "counts:  4 3 1 2" in out
+        assert "trend:   Reading: [ :.=. -#..]" in out
+        assert "4.7 to 6.1" in out
