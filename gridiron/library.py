@@ -17,6 +17,7 @@ from gridiron.mathextra import MATH_EXTRA_FUNCTIONS
 from gridiron.mathfns import MATH_FUNCTIONS
 from gridiron.queryfns import QUERY_FUNCTIONS
 from gridiron.rankfns import RANK_FUNCTIONS
+from gridiron.regression import REGRESSION_FUNCTIONS
 from gridiron.statfns import STAT_FUNCTIONS
 from gridiron.textextra import TEXT_EXTRA_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
@@ -33,6 +34,7 @@ _FAMILIES = (
     DATE_EXTRA_FUNCTIONS,
     STAT_FUNCTIONS,
     RANK_FUNCTIONS,
+    REGRESSION_FUNCTIONS,
     QUERY_FUNCTIONS,
     FINANCE_FUNCTIONS,
     FINANCE_EXTRA_FUNCTIONS,
