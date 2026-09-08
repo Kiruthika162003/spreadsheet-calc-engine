@@ -6,6 +6,7 @@ from examples import (
     firstsheet,
     quarterclose,
     sciencelab,
+    undosession,
     workbooktour,
 )
 
@@ -87,3 +88,19 @@ class TestAuditDay:
         assert "spread:  B1 feeds B2, C1" in out
         assert "healed:  D1 is healthy" in out
         assert "result:  D1 = 2640" in out
+
+
+class TestUndoSession:
+    def test_the_session_reads_end_to_end(self, capsys):
+        assert undosession.main() == 0
+        out = capsys.readouterr().out
+        assert "snapshot 'baseline' holds 3 cell(s)" in out
+        assert (
+            "pending: 1 edit(s) deferred; 2 formula(s) stale"
+        ) in out
+        assert "settled: C1 = 440" in out
+        assert "typo:    C1 = 2197.8" in out
+        assert "undo:    undid the edit at A1" in out
+        assert "back:    C1 = 440" in out
+        assert "0 added, 0 removed, 1 changed" in out
+        assert "restored: C1 = 220" in out
