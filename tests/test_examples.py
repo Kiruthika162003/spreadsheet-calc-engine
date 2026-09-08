@@ -4,6 +4,7 @@ from examples import (
     auditday,
     budgetsheet,
     firstsheet,
+    monthlyclose,
     pivotday,
     quarterclose,
     sciencelab,
@@ -130,3 +131,15 @@ class TestPivotDay:
         assert "East    400  150    550" in out
         assert "TOTAL   600  200    800" in out
         assert "| Region | Quarter | Sales |" in out
+
+
+class TestMonthlyClose:
+    def test_the_close_reads_end_to_end(self, capsys):
+        assert monthlyclose.main() == 0
+        out = capsys.readouterr().out
+        assert "ytd:     4500" in out
+        assert "average: 1500" in out
+        assert "months:  3" in out
+        assert "Feb dropped" in out
+        assert "wound:   YTD now reads #REF!" in out
+        assert "reclose: 3000" in out
