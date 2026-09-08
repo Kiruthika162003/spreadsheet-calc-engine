@@ -160,10 +160,9 @@ def hyperlink_function(registry: LinkRegistry):
                     code="#VALUE!", note=str(refusal)
                 )
             if len(args) == 2:
-                label = evaluate(
+                return evaluate(
                     args[1], lookup, functions, names
                 )
-                return label
             return target
 
         return run
