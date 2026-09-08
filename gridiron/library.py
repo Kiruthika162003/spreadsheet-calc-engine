@@ -25,12 +25,14 @@ from gridiron.regression import REGRESSION_FUNCTIONS
 from gridiron.statfns import STAT_FUNCTIONS
 from gridiron.textextra import TEXT_EXTRA_FUNCTIONS
 from gridiron.textfns import TEXT_FUNCTIONS
+from gridiron.textmore import TEXT_MORE_FUNCTIONS
 from gridiron.units import UNIT_FUNCTIONS
 
 _FAMILIES = (
     BUILTINS,
     TEXT_FUNCTIONS,
     TEXT_EXTRA_FUNCTIONS,
+    TEXT_MORE_FUNCTIONS,
     LOGIC_FUNCTIONS,
     LOGIC_MORE_FUNCTIONS,
     LOOKUP_FUNCTIONS,
