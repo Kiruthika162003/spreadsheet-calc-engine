@@ -22,6 +22,7 @@ PROOFS = (
     "gridiron.proofs.goalseekproof",
     "gridiron.proofs.subtotalproof",
     "gridiron.proofs.scenarioproof",
+    "gridiron.proofs.datatableproof",
 )
 
 
