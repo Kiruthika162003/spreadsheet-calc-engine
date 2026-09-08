@@ -78,7 +78,7 @@ def _numeric(value: Value) -> bool:
 
 
 def _folded(combine):
-    def run(args, lookup, functions, names) -> Value:
+    def run(args, lookup, _functions, _names) -> Value:
         pairs = _pairs(args, lookup)
         if is_error(pairs):
             return pairs
