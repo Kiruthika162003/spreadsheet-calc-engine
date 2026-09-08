@@ -6,6 +6,7 @@ from examples import (
     firstsheet,
     quarterclose,
     sciencelab,
+    spillsheet,
     undosession,
     workbooktour,
 )
@@ -104,3 +105,15 @@ class TestUndoSession:
         assert "back:    C1 = 440" in out
         assert "0 added, 0 removed, 1 changed" in out
         assert "restored: C1 = 220" in out
+
+
+class TestSpillSheet:
+    def test_the_spill_sheet_reads_end_to_end(self, capsys):
+        assert spillsheet.main() == 0
+        out = capsys.readouterr().out
+        assert "transpose: 2x3 grid spilled from E1" in out
+        assert "row1:      Ada Grace Alan" in out
+        assert "filter:    2x2 grid spilled from E5" in out
+        assert "kept:      Ada, Alan" in out
+        assert "sortby:    3x1 grid spilled from G5" in out
+        assert "ranked:    Alan, Ada, Grace" in out
