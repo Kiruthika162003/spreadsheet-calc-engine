@@ -14,7 +14,7 @@ def ref(text: str) -> CellRef:
 def board_with_thread() -> CommentBoard:
     board = CommentBoard()
     board.start(
-        ref("B3"), "Kiruthika", "why is this negative?"
+        ref("B3"), "Avery", "why is this negative?"
     )
     return board
 
@@ -24,7 +24,7 @@ class TestThreads:
         board = board_with_thread()
         thread = board.thread_at(ref("B3"))
         assert thread is not None
-        assert thread.entries[0].author == "Kiruthika"
+        assert thread.entries[0].author == "Avery"
         assert thread.address() == "B3"
 
     def test_replies_append_in_order(self):
@@ -35,7 +35,7 @@ class TestThreads:
         assert "2 entr(ies)" in verdict
         thread = board.thread_at(ref("B3"))
         assert [e.author for e in thread.entries] == [
-            "Kiruthika",
+            "Avery",
             "Priya",
         ]
 

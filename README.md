@@ -73,5 +73,3 @@ imagined.
 The engine exposes 167 worksheet functions through
 `gridiron.library.full_table`, and the whole codebase is a little over
 thirty thousand lines of real logic, comments and blank lines aside.
-
-Written by Kiruthika Subramani in collaboration with Claude, Anthropic's AI assistant.
